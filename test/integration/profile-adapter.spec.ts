@@ -14,16 +14,7 @@ import { createConfigComponent } from '@well-known-components/env-config-provide
 
 test('integration tests for profile adapter', function ({ components, stubComponents }) {
   it('calling with a single profile address, owning everything claimed', async () => {
-    const {
-      metrics,
-      config,
-      ownershipCaches,
-      thirdPartyProvidersStorage,
-      logs,
-      wearablesFetcher,
-      emotesFetcher,
-      namesFetcher
-    } = components
+    const { metrics, config, ownershipCaches, logs, wearablesFetcher, emotesFetcher, namesFetcher } = components
     const { theGraph, fetch, content } = stubComponents
     const address = '0x1'
 
@@ -116,25 +107,6 @@ test('integration tests for profile adapter', function ({ components, stubCompon
 
     theGraph.ensSubgraph.query = jest.fn().mockResolvedValue({ nfts: [{ id: 'id1', name: 'cryptonico' }] })
 
-    jest.spyOn(components.thirdPartyProvidersStorage, 'getAll').mockResolvedValue([
-      {
-        id: 'urn:decentraland:matic:collections-thirdparty:ntr1-meta',
-        resolver: 'https://api.swappable.io/api/v1',
-        metadata: {
-          thirdParty: {
-            name: 'test',
-            description: 'test'
-          }
-        }
-      }
-    ])
-    fetch.fetch
-      .withArgs('https://api.swappable.io/api/v1/registry/ntr1-meta/address/0x1/assets')
-      .onCall(0)
-      .resolves(new Response(JSON.stringify(tpwResolverResponseFull)))
-      .onCall(1)
-      .resolves(new Response(JSON.stringify(tpwResolverResponseFull)))
-
     const profilesComponent = await createProfilesComponent({
       metrics,
       content,
@@ -142,7 +114,6 @@ test('integration tests for profile adapter', function ({ components, stubCompon
       config,
       fetch,
       ownershipCaches,
-      thirdPartyProvidersStorage,
       logs,
       wearablesFetcher,
       emotesFetcher,
@@ -195,16 +166,7 @@ testWithComponents(() => {
   'integration tests for profile adapter: calling with a single profile address, ensuring ERC-721 and owning everything claimed',
   function ({ components, stubComponents }) {
     it('should work', async () => {
-      const {
-        metrics,
-        config,
-        ownershipCaches,
-        thirdPartyProvidersStorage,
-        logs,
-        wearablesFetcher,
-        emotesFetcher,
-        namesFetcher
-      } = components
+      const { metrics, config, ownershipCaches, logs, wearablesFetcher, emotesFetcher, namesFetcher } = components
       const { theGraph, fetch, content } = stubComponents
       const address = '0x1'
 
@@ -314,25 +276,6 @@ testWithComponents(() => {
 
       theGraph.ensSubgraph.query = jest.fn().mockResolvedValue({ nfts: [{ id: 'id1', name: 'cryptonico' }] })
 
-      jest.spyOn(components.thirdPartyProvidersStorage, 'getAll').mockResolvedValue([
-        {
-          id: 'urn:decentraland:matic:collections-thirdparty:ntr1-meta',
-          resolver: 'https://api.swappable.io/api/v1',
-          metadata: {
-            thirdParty: {
-              name: 'test',
-              description: 'test'
-            }
-          }
-        }
-      ])
-      fetch.fetch
-        .withArgs('https://api.swappable.io/api/v1/registry/ntr1-meta/address/0x1/assets')
-        .onCall(0)
-        .resolves(new Response(JSON.stringify(tpwResolverResponseFull)))
-        .onCall(1)
-        .resolves(new Response(JSON.stringify(tpwResolverResponseFull)))
-
       const profilesComponent = await createProfilesComponent({
         metrics,
         content,
@@ -340,7 +283,6 @@ testWithComponents(() => {
         config,
         fetch,
         ownershipCaches,
-        thirdPartyProvidersStorage,
         logs,
         wearablesFetcher,
         emotesFetcher,
@@ -386,16 +328,7 @@ testWithComponents(() => {
   'integration tests for profile adapter: calling with a single profile address with extended items, ensuring ERC-721 and owning everything claimed',
   function ({ components, stubComponents }) {
     it('should work', async () => {
-      const {
-        metrics,
-        config,
-        ownershipCaches,
-        thirdPartyProvidersStorage,
-        logs,
-        wearablesFetcher,
-        emotesFetcher,
-        namesFetcher
-      } = components
+      const { metrics, config, ownershipCaches, logs, wearablesFetcher, emotesFetcher, namesFetcher } = components
       const { theGraph, fetch, content } = stubComponents
       const address = '0x1'
 
@@ -524,25 +457,6 @@ testWithComponents(() => {
 
       theGraph.ensSubgraph.query = jest.fn().mockResolvedValue({ nfts: [{ id: 'id1', name: 'cryptonico' }] })
 
-      jest.spyOn(components.thirdPartyProvidersStorage, 'getAll').mockResolvedValue([
-        {
-          id: 'urn:decentraland:matic:collections-thirdparty:ntr1-meta',
-          resolver: 'https://api.swappable.io/api/v1',
-          metadata: {
-            thirdParty: {
-              name: 'test',
-              description: 'test'
-            }
-          }
-        }
-      ])
-      fetch.fetch
-        .withArgs('https://api.swappable.io/api/v1/registry/ntr1-meta/address/0x1/assets')
-        .onCall(0)
-        .resolves(new Response(JSON.stringify(tpwResolverResponseFull)))
-        .onCall(1)
-        .resolves(new Response(JSON.stringify(tpwResolverResponseFull)))
-
       const profilesComponent = await createProfilesComponent({
         metrics,
         content,
@@ -550,7 +464,6 @@ testWithComponents(() => {
         config,
         fetch,
         ownershipCaches,
-        thirdPartyProvidersStorage,
         logs,
         wearablesFetcher,
         emotesFetcher,
@@ -581,16 +494,7 @@ testWithComponents(() => {
 
 test('integration tests for profile adapter', function ({ components, stubComponents }) {
   it('calling with a single profile address, two eth wearables, one of them not owned', async () => {
-    const {
-      metrics,
-      config,
-      ownershipCaches,
-      thirdPartyProvidersStorage,
-      logs,
-      wearablesFetcher,
-      emotesFetcher,
-      namesFetcher
-    } = components
+    const { metrics, config, ownershipCaches, logs, wearablesFetcher, emotesFetcher, namesFetcher } = components
     const { theGraph, content, fetch } = stubComponents
     const addresses = ['0x3']
 
@@ -629,7 +533,6 @@ test('integration tests for profile adapter', function ({ components, stubCompon
       config,
       fetch,
       ownershipCaches,
-      thirdPartyProvidersStorage,
       logs,
       wearablesFetcher,
       emotesFetcher,
