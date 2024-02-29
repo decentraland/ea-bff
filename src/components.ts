@@ -98,10 +98,10 @@ export async function initComponents(
     throw new Error(`Invalid ETH_NETWORK ${l1Network}`)
   }
   const l2Network: L2Network = l1Network === 'mainnet' ? 'polygon' : 'mumbai'
-  const l1Provider = new HTTPProvider(`https://rpc.decentraland.org/${encodeURIComponent(l1Network)}?project=lamb2`, {
+  const l1Provider = new HTTPProvider(`https://rpc.decentraland.org/${encodeURIComponent(l1Network)}?project=ea-bff`, {
     fetch: fetch.fetch
   })
-  const l2Provider = new HTTPProvider(`https://rpc.decentraland.org/${encodeURIComponent(l2Network)}?project=lamb2`, {
+  const l2Provider = new HTTPProvider(`https://rpc.decentraland.org/${encodeURIComponent(l2Network)}?project=ea-bff`, {
     fetch: fetch.fetch
   })
   const catalystsFetcher = await createCatalystsFetcher({ l1Provider }, l1Network)
@@ -129,7 +129,6 @@ export async function initComponents(
     config,
     fetch,
     ownershipCaches,
-    thirdPartyProvidersStorage,
     logs,
     wearablesFetcher,
     emotesFetcher,

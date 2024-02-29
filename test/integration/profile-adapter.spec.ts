@@ -182,8 +182,6 @@ testWithComponents(() => {
   const config = createConfigComponent({
     ...defaultServerConfig(),
     CONTENT_URL: 'https://peer.decentraland.org/content',
-    LAMBDAS_URL: 'https://peer.decentraland.org/lambdas',
-    ARCHIPELAGO_URL: 'https://peer.decentraland.org/archipelago',
     COMMIT_HASH: 'commit_hash',
     CURRENT_VERSION: 'version',
     HTTP_SERVER_PORT: '7272',

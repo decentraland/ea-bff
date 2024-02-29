@@ -1,12 +1,14 @@
 import { AppComponents, ProfileMetadata } from '../types'
 import { Avatar, Entity, Snapshots } from '@dcl/schemas'
-import { createTPWOwnershipChecker } from '../ports/ownership-checker/tpw-ownership-checker'
 import { parseUrn } from '@dcl/urn-resolver'
 import { splitUrnAndTokenId } from '../logic/utils'
 
 function isBaseWearable(wearable: string): boolean {
   return wearable.includes('base-avatars')
 }
+
+// const URN_THIRD_PARTY_NAME_TYPE = 'blockchain-collection-third-party-name'
+const URN_THIRD_PARTY_ASSET_TYPE = 'blockchain-collection-third-party'
 
 export async function translateWearablesIdFormat(wearableId: string): Promise<string | undefined> {
   if (!wearableId.startsWith('dcl://')) {
@@ -62,7 +64,6 @@ export async function createProfilesComponent(
     | 'config'
     | 'fetch'
     | 'ownershipCaches'
-    | 'thirdPartyProvidersStorage'
     | 'logs'
     | 'wearablesFetcher'
     | 'emotesFetcher'
@@ -92,8 +93,6 @@ export async function createProfilesComponent(
 
       profileEntities = profileEntities.filter((entity) => !!entity.metadata)
 
-      const tpwOwnershipChecker = createTPWOwnershipChecker(components)
-
       return await Promise.all(
         profileEntities.map(async (entity) => {
           const ethAddress = entity.pointers[0]
@@ -102,39 +101,36 @@ export async function createProfilesComponent(
 
           metadata.timestamp = entity.timestamp
 
-          const names: string[] = []
-          const wearables: string[] = []
-          for (const { hasClaimedName, avatar, name } of metadata.avatars) {
-            if (hasClaimedName && name && name.trim().length > 0) {
-              names.push(name)
-            }
-
-            for (const wearableId of avatar.wearables) {
-              if (!isBaseWearable(wearableId)) {
-                const translatedWearableId = await translateWearablesIdFormat(wearableId)
-                if (translatedWearableId) {
-                  wearables.push(translatedWearableId)
-                }
-              }
-            }
-          }
-          tpwOwnershipChecker.addNFTsForAddress(ethAddress, wearables)
-
           const [ownedWearables, ownedEmotes, ownedNames] = await Promise.all([
             wearablesFetcher.fetchOwnedElements(ethAddress),
             emotesFetcher.fetchOwnedElements(ethAddress),
-            namesFetcher.fetchOwnedElements(ethAddress),
-            tpwOwnershipChecker.checkNFTsOwnership()
+            namesFetcher.fetchOwnedElements(ethAddress)
           ])
 
-          const thirdPartyWearables = tpwOwnershipChecker.getOwnedNFTsForAddress(ethAddress)
-
           const avatars: Avatar[] = []
+          const validatedWearables: string[] = []
+          const thirdPartyWearables: string[] = []
+          const validatedEmotes: { slot: number; urn: string }[] = []
           for (const avatar of metadata.avatars) {
-            const validatedWearables: string[] = []
-            for (const wearable of avatar.avatar.wearables) {
-              if (isBaseWearable(wearable)) {
-                validatedWearables.push(wearable)
+            for (const wearableId of avatar.avatar.wearables) {
+              if (isBaseWearable(wearableId)) {
+                validatedWearables.push(wearableId)
+                continue
+              }
+
+              const parsed = await parseUrn(wearableId)
+              console.log(wearableId, parsed?.type)
+              if (parsed?.type === URN_THIRD_PARTY_ASSET_TYPE) {
+                validatedWearables.push(wearableId)
+                continue
+              }
+
+              let wearable: string
+              if (!wearableId.startsWith('dcl://')) {
+                wearable = wearableId
+              } else if (parsed && parsed.uri) {
+                wearable = parsed.uri.toString()
+              } else {
                 continue
               }
 
@@ -157,7 +153,6 @@ export async function createProfilesComponent(
               }
             }
 
-            const validatedEmotes: { slot: number; urn: string }[] = []
             for (const emote of avatar.avatar.emotes ?? []) {
               if (!emote.urn.includes(':')) {
                 validatedEmotes.push(emote)
@@ -193,7 +188,6 @@ export async function createProfilesComponent(
               }
             })
           }
-
           return {
             timestamp: metadata.timestamp,
             avatars

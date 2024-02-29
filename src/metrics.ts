@@ -13,8 +13,8 @@ export const metricDeclarations = {
     type: IMetricsComponent.CounterType,
     labelNames: ['pathname', 'ids']
   },
-  dcl_lamb2_server_build_info: {
-    help: 'Lamb2 server static build info.',
+  dcl_ea_bff_server_build_info: {
+    help: 'EA BFF server static build info.',
     type: IMetricsComponent.GaugeType,
     labelNames: ['commitHash']
   },

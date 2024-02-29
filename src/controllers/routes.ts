@@ -12,9 +12,7 @@ import {
   thirdPartyWearablesHandler
 } from './handlers/third-party-wearables-handler'
 import { wearablesHandler } from './handlers/wearables-handler'
-import { explorerHandler } from './handlers/explorer-handler'
 import { errorHandler } from './handlers/errorHandler'
-import { aboutHandler } from './handlers/about-handler'
 import { outfitsHandler } from './handlers/outfits-handler'
 import { getCatalystServersHandler } from './handlers/catalyst-servers-handler'
 import { getNameDenylistHandler } from './handlers/get-name-denylist-handler'
@@ -26,7 +24,6 @@ export async function setupRouter(_: GlobalContext): Promise<Router<GlobalContex
   router.use(errorHandler)
 
   router.get('/status', statusHandler)
-  router.get('/about', aboutHandler)
   router.get('/users/:address/wearables', wearablesHandler)
   router.get('/users/:address/third-party-wearables', thirdPartyWearablesHandler)
   router.get('/users/:address/third-party-wearables/:collectionId', thirdPartyCollectionWearablesHandler)
@@ -41,10 +38,6 @@ export async function setupRouter(_: GlobalContext): Promise<Router<GlobalContex
   router.get('/contracts/servers', getCatalystServersHandler)
   router.get('/contracts/pois', getPOIsHandler)
   router.get('/contracts/denylisted-names', getNameDenylistHandler)
-
-  /* internal */
-  router.get('/explorer/:address/wearables', explorerHandler)
-  /* end internal */
 
   return router
 }

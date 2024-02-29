@@ -9,6 +9,6 @@ jobs:
   cd:
     uses: decentraland/platform-actions/.github/workflows/apps-docker-next.yml@main
     with:
-      service-name: lamb2
+      service-name: ea-bff
       dockerfile-url: https://raw.githubusercontent.com/decentraland/platform-actions/main/Dockerfile.alpine
     secrets: inherit
