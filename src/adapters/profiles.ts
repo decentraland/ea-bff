@@ -7,7 +7,6 @@ function isBaseWearable(wearable: string): boolean {
   return wearable.includes('base-avatars')
 }
 
-// const URN_THIRD_PARTY_NAME_TYPE = 'blockchain-collection-third-party-name'
 const URN_THIRD_PARTY_ASSET_TYPE = 'blockchain-collection-third-party'
 
 export async function translateWearablesIdFormat(wearableId: string): Promise<string | undefined> {
@@ -119,7 +118,6 @@ export async function createProfilesComponent(
               }
 
               const parsed = await parseUrn(wearableId)
-              console.log(wearableId, parsed?.type)
               if (parsed?.type === URN_THIRD_PARTY_ASSET_TYPE) {
                 validatedWearables.push(wearableId)
                 continue
